@@ -1,0 +1,14 @@
+.account {
+	border: 1px solid var(--secondary-light-gray);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1rem;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all 0.25s;
+}
+
+.account:hover {
+	box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
+}
