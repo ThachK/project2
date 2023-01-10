@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Navigate, Route, Routes } from "react-router-dom";
+import Account from "./pages/Account";
+import Accounts from "./pages/Accounts";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
+import Settings from "./pages/Settings";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<Routes>
+			{/* index means it is the root */}
+			<Route index element={<Home />} />
+			<Route path="login" element={<Login />} />
+			<Route path="register" element={<Register />} />
+			<Route path="accounts">
+				<Route index element={<Accounts />} />
+				<Route path=":id" element={<Account />} />
+			</Route>
+			<Route path="profile" element={<Profile />} />
+			<Route path="settings" element={<Settings />} />
+			<Route path="*" element={<Navigate to="" />} />
+		</Routes>
+	);
 }
 
 export default App;
