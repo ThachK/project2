@@ -1,0 +1,28 @@
+.chargesTable {
+	box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	border-collapse: collapse;
+}
+
+.chargesTable thead {
+	font-size: 14px;
+	letter-spacing: -0.5px;
+	color: rgb(133, 133, 133);
+	font-weight: 500;
+}
+
+.chargesTable tbody tr {
+	transition: all 0.25s;
+}
+
+.chargesTable tbody tr:hover {
+	background-color: rgb(205, 205, 205);
+}
+
+.chargesTable tbody tr td:first-child {
+	color: rgb(133, 133, 133);
+}
+
+.chargesTable td {
+	padding: 1rem;
+}
