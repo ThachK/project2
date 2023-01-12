@@ -1,41 +1,36 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Account from "../features/accounts/Account/Account";
+import {
+	fetchAccounts,
+	getAccountName,
+	getAccounts,
+	setAccountName,
+} from "../features/accounts/accounts.slice";
+import { store } from "../features/store/store";
+
+store.dispatch(fetchAccounts());
 
 const Accounts: React.FC<any> = () => {
-	//dummy data
-	const data = [
-		{
-			id: 0,
-			userId: 0,
-			type: "savings",
-			name: "Personal Savings",
-			balance: 12000,
-			cashback: 3.14,
-		},
-		{
-			id: 1,
-			userId: 0,
-			type: "checkings",
-			name: "Personal Checkings",
-			balance: 24187.96,
-			cashback: 3.14,
-		},
-		{
-			id: 2,
-			userId: 0,
-			type: "savings",
-			name: "Joint Savings",
-			balance: 5000.84,
-			cashback: 3.14,
-		},
-	];
+	// //useDispatch lets us run actions aka functions
+	// const dispatch = useDispatch();
+	// //useSelector lets us get state aka vairables
+	// const accountName = useSelector(getAccountName);
+
+	// const handleClick = () => {
+	// 	dispatch(setAccountName("Hamza Kamran"));
+	// };
+
+	//create a variable to store accounts from accounts slice
+	const accounts = useSelector(getAccounts);
+	console.log(accounts);
 
 	return (
 		<div className="flex-column">
 			{/* mapping through dummy data to account component   */}
-			{data.map((account) => (
-				<Account key={account.id} data={account} />
-			))}
+			{accounts?.map((account: any) => {
+				return <Account key={account?.id} data={account} />;
+			})}
 		</div>
 	);
 };
