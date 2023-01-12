@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Button from '../features/ui/Button/Button';
+import "../features/login/Login.css";
 
 const Login: React.FC<any> = () => {
 
@@ -37,15 +39,15 @@ const Login: React.FC<any> = () => {
         }
 
         if(user.id > 0){
-            navigate("/home")
+            navigate("")
         }
 
     }
 
   return (
     <div className="Login">
-        <div className="text-container">
-            <h1>Welcome to Revature Bank</h1>
+        <div className="container flex-column">
+            <h1>Welcome Back to Revature Bank</h1>
             <h3>Sign in to view your Revature Points</h3>
 
             <div className="input-container">
@@ -56,7 +58,7 @@ const Login: React.FC<any> = () => {
                 <input type="password" name="password" placeholder="password" onChange={gatherInput}/>
             </div>
 
-            <button className="login-button" >Log In</button>
+            <Button className="btn">Login</Button>
 
         </div>
     </div>
