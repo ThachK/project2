@@ -1,23 +1,17 @@
-.login{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
+.login {
+	margin-top: 3rem;
+	flex-direction: column;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1rem;
+	text-align: center;
 }
-
-input{
-    height: 25px;
-    margin-bottom: 5px;
-    margin-left: auto;
-    margin-right:auto;
-    width: 25%;
-    border-radius: 10px;
-    padding: 15px;
-    padding-left: 5px;
-    
+input {
+	height: 1rem;
+	width: 100%;
+	border-radius: 10px;
+	padding: 15px;
+	padding-left: 5px;
 }
-
-
-
-
