@@ -17,7 +17,7 @@ const Account: React.FC<any> = (props: any) => {
 				<p className="light-gray italics capitalize">{props.data?.type}</p>
 			</div>
 			<div>
-				<p>${props.data?.balance}</p>
+				<p>${props.data?.balance.toFixed(2)}</p>
 			</div>
 		</div>
 	);

@@ -65,7 +65,7 @@ const Login: React.FC<any> = () => {
 					/>
 				</div>
 				<div className="center">
-					<Button className="btn" onClick={login}>
+					<Button className="btn" onClick={login} maxWidth>
 						Login
 					</Button>
 				</div>
