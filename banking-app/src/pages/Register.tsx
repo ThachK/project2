@@ -2,8 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../features/Register/Register.css";
-
-
+import Button from "../features/ui/Button/Button";
 
 const Register: React.FC<any> = () => {
 	const user = {
@@ -49,12 +48,11 @@ const Register: React.FC<any> = () => {
 	};
 
 	return (
-		<div className="Register">
-			<div className="text-container">
+		<div className="register">
+			<div className="container flex-column">
 				<h1>Welcome to Revature Bank</h1>
-				<br></br>
-				<div>Please enter your personal information</div>
-				<div className="register_input">
+				<h3>Please enter your personal information</h3>
+				<div>
 					<input
 						type="text"
 						name="fname"
@@ -62,7 +60,7 @@ const Register: React.FC<any> = () => {
 						onChange={gatherInput}
 					/>
 				</div>
-				<div className="register_input">
+				<div>
 					<input
 						type="text"
 						name="lname"
@@ -70,9 +68,8 @@ const Register: React.FC<any> = () => {
 						onChange={gatherInput}
 					/>
 				</div>
-				<br></br>
-				<div>Please enter your email/passowrd</div>
-				<div className="register_input">
+				<h3>Please enter your email and password</h3>
+				<div>
 					<input
 						type="text"
 						name="email"
@@ -80,7 +77,7 @@ const Register: React.FC<any> = () => {
 						onChange={gatherInput}
 					/>
 				</div>
-				<div className="register_input">
+				<div>
 					<input
 						type="password"
 						name="password"
@@ -88,15 +85,16 @@ const Register: React.FC<any> = () => {
 						onChange={gatherInput}
 					/>
 				</div>
-				<br></br>
-				<button className="login-button">Register</button>
-				<br></br>
-				<br></br>
-				<img src = {require("../pics/register.jpg")} alt = "Image"></img>
-				<div className="register_footer">Welcome to the Revature Family!</div>
+				<div>
+					<Button className="btn" maxWidth>
+						Register
+					</Button>
+				</div>
+			</div>
+			<div className="register-footer">
+				<footer> Welcome to the Revature Family! </footer>
 			</div>
 		</div>
-		
 	);
 };
 

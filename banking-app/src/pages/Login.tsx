@@ -69,6 +69,9 @@ const Login: React.FC<any> = () => {
 						Login
 					</Button>
 				</div>
+				{/* <div className="login-footer">
+					<footer> Welcome to the Revature Family! </footer>
+				</div> */}
 			</div>
 		</div>
 	);
