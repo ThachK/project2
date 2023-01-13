@@ -48,3 +48,8 @@ body {
 .capitalize {
 	text-transform: capitalize;
 }
+
+.center {
+	display: flex;
+	justify-content: center;
+}
