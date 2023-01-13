@@ -3,7 +3,11 @@ import "./Button.css";
 
 const Button: React.FC<any> = (props: any) => {
 	return (
-		<button onClick={props.onClick} className="btn">
+		<button
+			style={props?.maxWidth && { width: "100%" }}
+			onClick={props.onClick}
+			className="btn"
+		>
 			{props.children}
 		</button>
 	);

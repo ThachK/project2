@@ -23,7 +23,6 @@ const Accounts: React.FC<any> = () => {
 
 	//create a variable to store accounts from accounts slice
 	const accounts = useSelector(getAccounts);
-	console.log(accounts);
 
 	return (
 		<div className="flex-column">
