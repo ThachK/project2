@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../features/Register/Register.css";
+
+
 
 const Register: React.FC<any> = () => {
 	const user = {
@@ -46,12 +49,30 @@ const Register: React.FC<any> = () => {
 	};
 
 	return (
-		<div className="Login">
+		<div className="Register">
 			<div className="text-container">
 				<h1>Welcome to Revature Bank</h1>
-				<h3>Sign in to view your Revature Points</h3>
-
-				<div className="input-container">
+				<br></br>
+				<div>Please enter your personal information</div>
+				<div className="register_input">
+					<input
+						type="text"
+						name="fname"
+						placeholder="First Name"
+						onChange={gatherInput}
+					/>
+				</div>
+				<div className="register_input">
+					<input
+						type="text"
+						name="lname"
+						placeholder="Last Name"
+						onChange={gatherInput}
+					/>
+				</div>
+				<br></br>
+				<div>Please enter your email/passowrd</div>
+				<div className="register_input">
 					<input
 						type="text"
 						name="email"
@@ -59,8 +80,7 @@ const Register: React.FC<any> = () => {
 						onChange={gatherInput}
 					/>
 				</div>
-
-				<div className="input-container">
+				<div className="register_input">
 					<input
 						type="password"
 						name="password"
@@ -68,10 +88,15 @@ const Register: React.FC<any> = () => {
 						onChange={gatherInput}
 					/>
 				</div>
-
-				<button className="login-button">Log In</button>
+				<br></br>
+				<button className="login-button">Register</button>
+				<br></br>
+				<br></br>
+				<img src = {require("../pics/register.jpg")} alt = "Image"></img>
+				<div className="register_footer">Welcome to the Revature Family!</div>
 			</div>
 		</div>
+		
 	);
 };
 
