@@ -7,26 +7,9 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Settings from "./pages/Settings";
-import React, { useState, useEffect } from 'react';
 import './darkMode.css';
 function App() {
-	const [theme, setTheme] = useState(
-		localStorage.getItem('theme') || 'light'
-	);
-	const toggleTheme = () => {
-		if (theme === 'light') {
-			setTheme('dark');
-		} else {
-			setTheme('light');
-		}
-	}	;
-	useEffect(() => {
-		localStorage.setItem('theme', theme);
-		document.body.className = theme;
-	}, [theme]);
 	return (
-		<div className={`App ${theme}`}>
-			<button onClick={toggleTheme}>Select Light/Dark Mode</button>
 		<Routes>
 			<Route path="" element={<Layout />}>
 				{/* index means it is the root */}
@@ -42,8 +25,6 @@ function App() {
 				<Route path="*" element={<Navigate to="" />} />
 			</Route>
 		</Routes>
-		</div>
-		
 	);
 }
 
