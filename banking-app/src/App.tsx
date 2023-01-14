@@ -8,8 +8,25 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Settings from "./pages/Settings";
 import './darkMode.css';
+import { useState, useEffect } from "react";
+
 function App() {
+	const [theme, setTheme] = useState(
+		localStorage.getItem('theme') || 'light'
+	);
+	const toggleTheme = () => {
+		if (theme === 'light') {
+			setTheme('dark');
+		} else {
+			setTheme('light');
+		}
+	}	;
+	useEffect(() => {
+		localStorage.setItem('theme', theme);
+		document.body.className = theme;
+	}, [theme]);
 	return (
+		<div>
 		<Routes>
 			<Route path="" element={<Layout />}>
 				{/* index means it is the root */}
@@ -25,6 +42,7 @@ function App() {
 				<Route path="*" element={<Navigate to="" />} />
 			</Route>
 		</Routes>
+		</div>
 	);
 }
 

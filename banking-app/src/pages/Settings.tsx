@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../darkMode.css'
 
 const Settings: React.FC<any> = () => {
 	const [theme, setTheme] = useState(
@@ -7,7 +8,7 @@ const Settings: React.FC<any> = () => {
 	const toggleTheme = () => {
 		if (theme === 'light') {
 			setTheme('dark');
-		} else {
+		} else if (theme === 'dark'){
 			setTheme('light');
 		}
 	}	;
@@ -18,7 +19,7 @@ const Settings: React.FC<any> = () => {
 	return (
 		<div className={`App ${theme}`}>
 			<h1 className = 'settings-header'>Settings</h1>
-			<button onClick={toggleTheme}>Select Light/Dark Mode</button>
+			<button className = 'mode-button' onClick={toggleTheme}>Select Light/Dark Mode</button>
 		</div>
 	)
 };
