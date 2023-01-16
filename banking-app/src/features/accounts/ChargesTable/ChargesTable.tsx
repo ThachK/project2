@@ -1,16 +1,12 @@
-import { all } from "axios";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getCharges } from "../accounts.slice";
 import "./ChargesTable.css";
 
-const ChargesTable: React.FC<any> = ({ filter = "" }) => {
-	const allCharges = useSelector(getCharges);
+const ChargesTable: React.FC<any> = ({ filter = "", allCharges }) => {
 	const [charges, setCharges] = useState(allCharges);
 
 	useEffect(() => {
 		setCharges(allCharges);
-	}, [allCharges]);
+	}, [allCharges]); //eslint-disable-line
 
 	useEffect(() => {
 		if (filter === "Debits") {
@@ -22,7 +18,7 @@ const ChargesTable: React.FC<any> = ({ filter = "" }) => {
 		} else {
 			setCharges(allCharges);
 		}
-	}, [filter]);
+	}, [filter]); //eslint-disable-line
 	return (
 		<table className="chargesTable">
 			<thead>

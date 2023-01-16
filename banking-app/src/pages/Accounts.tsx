@@ -1,35 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Account from "../features/accounts/Account/Account";
 import {
-	fetchAccounts,
-	getAccountName,
+	fetchAccountsById,
 	getAccounts,
-	setAccountName,
 } from "../features/accounts/accounts.slice";
-import { store } from "../features/store/store";
-
-store.dispatch(fetchAccounts());
+import NewAccountModal from "../features/accounts/NewAccountModal/NewAccountModal";
+import Button from "../features/ui/Button/Button";
+import { getUser, setUser } from "../features/users/users.slice";
 
 const Accounts: React.FC<any> = () => {
-	// //useDispatch lets us run actions aka functions
-	// const dispatch = useDispatch();
-	// //useSelector lets us get state aka vairables
-	// const accountName = useSelector(getAccountName);
+	const dispatch = useDispatch<any>();
 
-	// const handleClick = () => {
-	// 	dispatch(setAccountName("Hamza Kamran"));
-	// };
-
-	//create a variable to store accounts from accounts slice
 	const accounts = useSelector(getAccounts);
+	const user = useSelector(getUser);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	// on component mount, get user from local storage
+	useEffect(() => {
+		const setUserState = async () => {
+			await dispatch(setUser());
+		};
+
+		setUserState();
+	}, []); // eslint-disable-line
+
+	useEffect(() => {
+		const getAccounts = async () => {
+			await dispatch(fetchAccountsById(user?.id));
+		};
+
+		getAccounts();
+	}, [isModalOpen]); // eslint-disable-line
 
 	return (
 		<div className="flex-column">
+			<Button onClick={() => setIsModalOpen(true)}>
+				Add New Account
+			</Button>
+
 			{/* mapping through dummy data to account component   */}
 			{accounts?.map((account: any) => {
 				return <Account key={account?.id} data={account} />;
 			})}
+
+			{isModalOpen && <NewAccountModal setIsModalOpen={setIsModalOpen} />}
 		</div>
 	);
 };

@@ -4,7 +4,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
 	accounts: [],
 	charges: [],
-	accountName: "Kimmy Kamran",
 	currentAccount: {},
 };
 
@@ -14,28 +13,24 @@ let dummyAccounts: any = [
 		userId: 0,
 		type: "savings",
 		name: "Personal Savings",
-		balance: 12000,
-		cashback: 3.14,
+		balance: 0,
 	},
 	{
 		id: 1,
 		userId: 0,
 		type: "checkings",
 		name: "Personal Checkings",
-		balance: 24187.96,
-		cashback: 3.14,
+		balance: 0,
 	},
 	{
 		id: 2,
 		userId: 0,
 		type: "savings",
 		name: "Joint Savings",
-		balance: 5000.84,
-		cashback: 3.14,
+		balance: 0,
 	},
 ];
-
-const dummyCharges = [
+let dummyCharges: any = [
 	{
 		id: 0,
 		account_id: 0,
@@ -114,7 +109,6 @@ const dummyCharges = [
 		amount: 1400,
 	},
 ];
-
 dummyAccounts = dummyAccounts.map((account: any) => {
 	let balance = 0;
 
@@ -136,11 +130,133 @@ dummyAccounts = dummyAccounts.map((account: any) => {
 });
 
 //create async thunks
+export const transferMoney = createAsyncThunk(
+	"accounts/transfer",
+	async (body: any) => {
+		try {
+			// const response = await axios.post("http://localhost:5000/accounts/transfer", body);
+			// return response.data;
+
+			// simulate using dummy data
+			dummyCharges = [
+				...dummyCharges,
+				{
+					id: dummyCharges.length,
+					account_id: body?.from,
+					date: "01/12/2023",
+					chargeName: `Transfer to account #${body?.to}`,
+					amount: -body?.amount,
+				},
+			];
+			dummyCharges = [
+				...dummyCharges,
+				{
+					id: dummyCharges.length,
+					account_id: body?.to,
+					date: "01/12/2023",
+					chargeName: `Transfer from account #${body?.from}`,
+					amount: body?.amount,
+				},
+			];
+
+			return true;
+		} catch (err: any) {
+			return err.message;
+		}
+	}
+);
+export const deleteAccount = createAsyncThunk(
+	"accounts/deleteAccount",
+	async (id: any) => {
+		try {
+			// const response = await axios.delete(`http://localhost:5000/accounts/${id}`);
+
+			// removing account from dummy data
+			const newAccounts = [];
+			for (let account of dummyAccounts) {
+				if (account.id !== id) {
+					newAccounts.push(account);
+				}
+			}
+
+			dummyAccounts = [...newAccounts];
+
+			dummyAccounts = dummyAccounts.map((account: any) => {
+				let balance = 0;
+
+				let charges = [];
+				for (let charge of dummyCharges) {
+					if (charge.account_id === account.id) {
+						charges.push(charge);
+					}
+				}
+
+				for (let charge of charges) {
+					balance += charge.amount;
+				}
+
+				return {
+					...account,
+					balance,
+				};
+			});
+
+			return true;
+		} catch (err: any) {
+			return err.message;
+		}
+	}
+);
+export const createNewAccount = createAsyncThunk(
+	"accounts/createAccount",
+	async (body: any) => {
+		try {
+			// const response = await axios.post("http://localhost:5000/accounts", body);
+			// return response.data;
+
+			// adding new account to dummy data
+			const { userId, name, type } = body;
+			const newAccount = {
+				id: dummyAccounts.length,
+				userId,
+				type,
+				name,
+				balance: 0,
+			};
+			dummyAccounts = [...dummyAccounts, newAccount];
+
+			dummyAccounts = dummyAccounts.map((account: any) => {
+				let balance = 0;
+
+				let charges = [];
+				for (let charge of dummyCharges) {
+					if (charge.account_id === account.id) {
+						charges.push(charge);
+					}
+				}
+
+				for (let charge of charges) {
+					balance += charge.amount;
+				}
+
+				return {
+					...account,
+					balance,
+				};
+			});
+
+			return true;
+		} catch (err: any) {
+			return err.message;
+		}
+	}
+);
+
 export const fetchAccountById = createAsyncThunk(
 	"accounts/fetchAccountById",
 	async (id: any) => {
 		try {
-			// const response = axios.get(`http://localhost:5000/accounts/${id}`);
+			// const response = await axios.get(`http://localhost:5000/accounts/${id}`);
 			// return response.data;
 			for (let account of dummyAccounts) {
 				if (account.id === Number(id)) {
@@ -155,12 +271,12 @@ export const fetchAccountById = createAsyncThunk(
 	}
 );
 
-export const fetchAccounts = createAsyncThunk(
+export const fetchAccountsById = createAsyncThunk(
 	//allows us to get async functions
-	"accounts/fetchAccounts",
-	async () => {
+	"accounts/fetchAccountsById",
+	async (id: any) => {
 		try {
-			// const response = axios.get("http://localhost:5000/accounts");
+			// const response = await axios.get(`http://localhost:5000/accounts/${id}`);
 			// return response.data;
 			return dummyAccounts;
 		} catch (err: any) {
@@ -192,14 +308,10 @@ const accountsSlice = createSlice({
 	initialState,
 	//reducers allow us to modify state using functions
 	//not a function to GET data, but rather MODIFY data
-	reducers: {
-		setAccountName(state, action) {
-			state.accountName = action.payload;
-		},
-	},
+	reducers: {},
 	extraReducers(builder) {
 		builder
-			.addCase(fetchAccounts.fulfilled, (state, action) => {
+			.addCase(fetchAccountsById.fulfilled, (state, action) => {
 				state.accounts = action.payload;
 			}) //gets executed if successful
 			.addCase(fetchChargesById.fulfilled, (state, action) => {
@@ -218,15 +330,12 @@ export const getAccounts = (state: any) => {
 export const getCharges = (state: any) => {
 	return state.accounts.charges;
 };
-export const getAccountName = (state: any) => {
-	return state.accounts.accountName;
-};
 export const getCurrentAccount = (state: any) => {
 	return state.accounts.currentAccount;
 };
 
 // export actions
-export const { setAccountName } = accountsSlice.actions;
+export const {} = accountsSlice.actions; //eslint-disable-line
 
 //export reducer
 export default accountsSlice.reducer;

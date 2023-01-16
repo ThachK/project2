@@ -1,49 +1,86 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../features/Register/Register.css";
 import Button from "../features/ui/Button/Button";
 
 const Register: React.FC<any> = () => {
-	const user = {
-		id: 0,
-		firstName: "",
-		lastName: "",
-		email: "",
-		password: "",
-	};
-
-	const [firstName, setFirst] = useState("");
-	const [lastName, setLast] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-
 	const navigate = useNavigate();
 
-	const gatherInput = (input: any) => {
-		if (input.target.name === "email") {
-			setEmail(input.target.value);
-		} else {
-			setPassword(input.target.value);
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const [address, setAddress] = useState("");
+
+	const getMissingFields = () => {
+		const result: any = [];
+
+		if (!firstName) {
+			result.push("First Name");
 		}
+		if (!lastName) {
+			result.push("Last Name");
+		}
+		if (!email) {
+			result.push("Email");
+		}
+		if (!password) {
+			result.push("Password");
+		}
+		if (!confirmPassword) {
+			result.push("Confirm Password");
+		}
+		if (!phoneNumber) {
+			result.push("Phone Number");
+		}
+		if (!address) {
+			result.push("Address");
+		}
+
+		return result;
 	};
 
-	const login = async () => {
-		const response = await axios.post("http//localhost:5000/auth", {
-			email,
-			password,
-		});
+	const handleLogin = async (e: any) => {
+		e.preventDefault();
 
-		if (response.status === 202) {
-			console.log(response);
+		// form validation
+		const missingFields = getMissingFields();
+		if (missingFields.length > 0) {
+			alert(
+				`Please enter valid information for the following fields: ${missingFields}`
+			);
+		} else {
+			// check if passwords match
+			if (password !== confirmPassword) {
+				alert("Error: passwords do not match.");
+			} else {
+				const body = {
+					firstName,
+					lastName,
+					email,
+					password,
+					phoneNumber,
+					address,
+				};
+				console.log(body);
 
-			user.id = response.data.id;
-			user.email = response.data.email;
-			user.password = response.data.password;
-		}
+				// TODO: implement register logic
+				alert("You have created a new account.");
 
-		if (user.id > 0) {
-			navigate("/home");
+				// reset field
+				setFirstName("");
+				setLastName("");
+				setEmail("");
+				setPassword("");
+				setConfirmPassword("");
+				setPhoneNumber("");
+				setAddress("");
+
+				// redirect to the login page
+				navigate("/login");
+			}
 		}
 	};
 
@@ -51,45 +88,81 @@ const Register: React.FC<any> = () => {
 		<div className="register">
 			<div className="container flex-column">
 				<h1>Welcome to Revature Bank</h1>
-				<h3>Please enter your personal information</h3>
-				<div>
-					<input
-						type="text"
-						name="fname"
-						placeholder="First Name"
-						onChange={gatherInput}
-					/>
-				</div>
-				<div>
-					<input
-						type="text"
-						name="lname"
-						placeholder="Last Name"
-						onChange={gatherInput}
-					/>
-				</div>
-				<h3>Please enter your email and password</h3>
-				<div>
-					<input
-						type="text"
-						name="email"
-						placeholder="email"
-						onChange={gatherInput}
-					/>
-				</div>
-				<div>
-					<input
-						type="password"
-						name="password"
-						placeholder="password"
-						onChange={gatherInput}
-					/>
-				</div>
-				<div>
-					<Button className="btn" maxWidth>
-						Register
+
+				<form className="flex-column">
+					<div className="flex-row">
+						<label htmlFor="firstName">First Name:</label>
+						<input
+							type="text"
+							id="firstName"
+							value={firstName}
+							onChange={(e: any) => setFirstName(e.target.value)}
+						/>
+					</div>
+					<div className="flex-row">
+						<label htmlFor="lastName">Last Name:</label>
+						<input
+							type="text"
+							id="lastName"
+							value={lastName}
+							onChange={(e: any) => setLastName(e.target.value)}
+						/>
+					</div>
+					<div className="flex-row">
+						<label htmlFor="email">Email:</label>
+						<input
+							type="email"
+							id="email"
+							value={email}
+							onChange={(e: any) => setEmail(e.target.value)}
+						/>
+					</div>
+					<div className="flex-row">
+						<label htmlFor="password">Password:</label>
+						<input
+							type="password"
+							id="password"
+							value={password}
+							onChange={(e: any) => setPassword(e.target.value)}
+						/>
+					</div>
+					<div className="flex-row">
+						<label htmlFor="confirmPassword">
+							Confirm Password:
+						</label>
+						<input
+							type="password"
+							id="confirmPassword"
+							value={confirmPassword}
+							onChange={(e: any) =>
+								setConfirmPassword(e.target.value)
+							}
+						/>
+					</div>
+					<div className="flex-row">
+						<label htmlFor="phoneNumber">Phone Number:</label>
+						<input
+							type="number"
+							id="phoneNumber"
+							value={phoneNumber}
+							onChange={(e: any) =>
+								setPhoneNumber(e.target.value)
+							}
+						/>
+					</div>
+					<div className="flex-row">
+						<label htmlFor="address">Address:</label>
+						<input
+							type="text"
+							id="address"
+							value={address}
+							onChange={(e: any) => setAddress(e.target.value)}
+						/>
+					</div>
+					<Button onClick={handleLogin} maxWidth>
+						Create Account
 					</Button>
-				</div>
+				</form>
 			</div>
 			<div className="register-footer">
 				<footer> Welcome to the Revature Family! </footer>

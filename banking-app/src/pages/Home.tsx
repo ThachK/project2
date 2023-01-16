@@ -1,11 +1,14 @@
 import React from "react";
-import "./Home.css";
+import "../features/home/Home.css";
 
 const Home: React.FC<any> = () => {
 	return (
-		<div className="Home flex-column">
+		<div className="home flex-column">
 			<div className="home-image">
-				<img src={require("../assets/rev_logo.png")} alt="revature_logo"></img>
+				<img
+					src={require("../assets/rev_logo.png")}
+					alt="revature_logo"
+				></img>
 			</div>
 			<div className="home-container">
 				<h1 className="welcome-banner">
@@ -22,16 +25,16 @@ const Home: React.FC<any> = () => {
 			</div>
 			<div className="marquee">
 				<h3 className="banner-text">
-					Start tracking your Revature Points today! Join our cashback reward
-					system! Track income and expenses!
+					Start tracking your Revature Points today! Join our cashback
+					reward system! Track income and expenses!
 				</h3>
 				<h3 className="banner-text" style={{ left: 1200 }}>
-					Start tracking your Revature Points today! Join our cashback reward
-					system! Track income and expenses!
+					Start tracking your Revature Points today! Join our cashback
+					reward system! Track income and expenses!
 				</h3>
 				<h3 className="banner-text" style={{ left: 2400 }}>
-					Start tracking your Revature Points today! Join our cashback reward
-					system! Track income and expenses!
+					Start tracking your Revature Points today! Join our cashback
+					reward system! Track income and expenses!
 				</h3>
 			</div>
 		</div>

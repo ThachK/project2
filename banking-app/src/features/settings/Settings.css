@@ -1,0 +1,24 @@
+.settingsSection {
+	padding: 1rem 0;
+	border-bottom: 1px solid var(--secondary-light-gray);
+}
+
+.settingsSection:last-child {
+	border-bottom: none;
+}
+
+.settingsSection label {
+	color: var(--primary-dark-gray);
+}
+
+.settingsSection input {
+	font-size: 1rem;
+	padding: 0.5rem 1.5rem;
+	border-radius: 10px;
+	outline: none;
+	border: 1px solid var(--primary-dark-gray);
+}
+
+.settingsSection input:disabled {
+	cursor: not-allowed;
+}
