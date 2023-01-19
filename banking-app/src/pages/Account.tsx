@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+	calculateAccountBalance,
 	fetchAccountById,
 	fetchAccountsById,
 	fetchChargesById,
-	getAccounts,
 	getCharges,
 	getCurrentAccount,
 } from "../features/accounts/accounts.slice";
@@ -21,7 +21,6 @@ const Account: React.FC<any> = () => {
 	const user = useSelector(getUser);
 	const currentAccount = useSelector(getCurrentAccount);
 	const charges = useSelector(getCharges);
-	const accounts = useSelector(getAccounts);
 
 	const dispatch = useDispatch<any>();
 
@@ -34,6 +33,14 @@ const Account: React.FC<any> = () => {
 		dispatch(fetchAccountById(id));
 		dispatch(fetchChargesById(id));
 	}, [user]); //eslint-disable-line
+
+	// when current account is loaded
+	useEffect(() => {
+		// update account balance
+		if (currentAccount?.accountId) {
+			dispatch(calculateAccountBalance(currentAccount));
+		}
+	}, [currentAccount, isModalOpen]); //eslint-disable-line
 
 	// fetch charges on transfer modal change
 	useEffect(() => {

@@ -93,7 +93,7 @@ const Register: React.FC<any> = () => {
 			<div className="container flex-column">
 				<h1>Welcome to Revature Bank</h1>
 
-				<form className="flex-column">
+				<form className="flex-column" autoComplete="off">
 					<div className="flex-row">
 						<label htmlFor="firstName">First Name:</label>
 						<input

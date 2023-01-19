@@ -21,7 +21,6 @@ export const register = createAsyncThunk(
 		}
 	}
 );
-
 export const login = createAsyncThunk("users/login", async (body: any) => {
 	try {
 		const response = await axios.post(`${BASE_URL}/users/login`, body);
@@ -30,6 +29,34 @@ export const login = createAsyncThunk("users/login", async (body: any) => {
 		throw new Error(err.message);
 	}
 });
+export const changePassword = createAsyncThunk(
+	"users/changePassword",
+	async (payload: any) => {
+		try {
+			const response = await axios.put(
+				`${BASE_URL}/users/password/${payload?.id}`,
+				{ password: payload?.newPassword }
+			);
+			return response.data;
+		} catch (err: any) {
+			return new Error(err.message);
+		}
+	}
+);
+export const changeAddress = createAsyncThunk(
+	"users/changeAddress",
+	async (payload: any) => {
+		try {
+			const response = await axios.put(
+				`${BASE_URL}/users/address/${payload?.id}`,
+				{ address: payload?.address }
+			);
+			return response.data;
+		} catch (err: any) {
+			return new Error(err.message);
+		}
+	}
+);
 
 // create the user slice
 const usersSlice = createSlice({

@@ -28,7 +28,7 @@ const Login: React.FC<any> = () => {
 			try {
 				await dispatch(login(body));
 			} catch (err: any) {
-				alert(`Unabled to login: ${err.message}`);
+				alert(`Unable to login: ${err.message}`);
 			}
 		}
 	};
@@ -47,8 +47,9 @@ const Login: React.FC<any> = () => {
 			dispatch(setStatus("idle"));
 
 			alert("Successfully logged in.");
-		} else {
-			status === "rejected" && alert("Unabled to login: invalid credentials.");
+		} else if (status === "rejected") {
+			alert("Unabled to login: invalid credentials.");
+			dispatch(setStatus("idle"));
 		}
 	}, [status]); // eslint-disable-line
 

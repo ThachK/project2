@@ -17,13 +17,13 @@ function App() {
 
 	useEffect(() => {
 		dispatch(setUser());
-	}, []);
+	}, []); // eslint-disable-line
 
 	useEffect(() => {
 		if (user?.userId) {
 			dispatch(fetchAccountsById(user.userId));
 		}
-	}, [user]);
+	}, [user]); // eslint-disable-line
 
 	return (
 		<Routes>

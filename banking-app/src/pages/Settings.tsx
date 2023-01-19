@@ -1,10 +1,30 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "../features/settings/Settings.css";
 import Button from "../features/ui/Button/Button";
+import {
+	changeAddress,
+	changePassword,
+	getUser,
+} from "../features/users/users.slice";
 
 const Settings: React.FC<any> = () => {
-	// address ref
-	const [address, setAddress] = useState("123 Example St.");
+	const dispatch = useDispatch<any>();
+	const user = useSelector(getUser);
+
+	// contact info
+	const [address, setAddress] = useState(user?.address || "");
+	const [email, setEmail] = useState(user?.email || "");
+	const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || "");
+	const [currentPwd, setCurrentPwd] = useState(user?.password || "");
+
+	// on user load, set contact info
+	useEffect(() => {
+		setAddress(user?.address || "");
+		setEmail(user?.email || "");
+		setPhoneNumber(user?.phoneNumber || "");
+		setCurrentPwd(user?.password || "");
+	}, [user]);
 
 	// refs for update password section
 	const currentPasswordRef = useRef<HTMLInputElement>(null);
@@ -30,14 +50,25 @@ const Settings: React.FC<any> = () => {
 				if (newPassword === currentPassword) {
 					alert("New password cannot be your current password.");
 				} else {
-					// clear the password fields
-					currentPasswordRef.current.value = "";
-					newPasswordRef.current.value = "";
-					confirmNewPasswordRef.current.value = "";
+					// check if given password == current password
+					if (currentPassword === currentPwd) {
+						const payload = {
+							id: user?.userId,
+							newPassword,
+						};
+						dispatch(changePassword(payload));
 
-					// TODO: implement logic
+						// clear the password fields
+						currentPasswordRef.current.value = "";
+						newPasswordRef.current.value = "";
+						confirmNewPasswordRef.current.value = "";
 
-					alert("Password has been updated.");
+						alert("Password has been updated.");
+					} else {
+						alert(
+							"Cannot update password: your current password is incorrect."
+						);
+					}
 				}
 			} else {
 				alert("Passwords do not match");
@@ -51,7 +82,12 @@ const Settings: React.FC<any> = () => {
 		if (!address) {
 			alert("Please provide an address.");
 		} else {
-			// TODO: implement logic
+			const payload = {
+				id: user?.userId,
+				address,
+			};
+			dispatch(changeAddress(payload));
+
 			alert("Address has been updated.");
 		}
 	};
@@ -60,9 +96,7 @@ const Settings: React.FC<any> = () => {
 		<main className="flex-column">
 			<div>
 				<h2>Settings</h2>
-				<p className="gray">
-					Manage your account settings and preferences.
-				</p>
+				<p className="gray">Manage your account settings and preferences.</p>
 			</div>
 			<section className="settingsSection flex-column">
 				<h3>Address</h3>
@@ -75,9 +109,7 @@ const Settings: React.FC<any> = () => {
 							value={address}
 							onChange={(e: any) => setAddress(e.target.value)}
 						/>
-						<Button onClick={handleAddressChange}>
-							Update Address
-						</Button>
+						<Button onClick={handleAddressChange}>Update Address</Button>
 					</div>
 				</form>
 			</section>
@@ -86,21 +118,11 @@ const Settings: React.FC<any> = () => {
 				<form className="flex-column">
 					<div className="flex-row">
 						<label htmlFor="email">Email:</label>
-						<input
-							id="email"
-							disabled
-							type="text"
-							value="kimmythach@gmail.com"
-						/>
+						<input id="email" disabled type="text" value={email} />
 					</div>
 					<div className="flex-row">
 						<label htmlFor="phoneNumber">Phone Number:</label>
-						<input
-							id="phoneNumber"
-							disabled
-							type="text"
-							value="(123) 456-7890"
-						/>
+						<input id="phoneNumber" disabled type="text" value={phoneNumber} />
 					</div>
 				</form>
 			</section>
@@ -108,36 +130,22 @@ const Settings: React.FC<any> = () => {
 				<h3>Change Password</h3>
 				<form className="flex-column">
 					<div className="flex-row">
-						<label htmlFor="currentPassword">
-							Current Password:
-						</label>
-						<input
-							type="text"
-							id="currentPassword"
-							ref={currentPasswordRef}
-						/>
+						<label htmlFor="currentPassword">Current Password:</label>
+						<input type="text" id="currentPassword" ref={currentPasswordRef} />
 					</div>
 					<div className="flex-row">
 						<label htmlFor="newPassword">New Password:</label>
-						<input
-							type="text"
-							id="newPassword"
-							ref={newPasswordRef}
-						/>
+						<input type="text" id="newPassword" ref={newPasswordRef} />
 					</div>
 					<div className="flex-row">
-						<label htmlFor="confirmNewPassword">
-							Confirm New Password:
-						</label>
+						<label htmlFor="confirmNewPassword">Confirm New Password:</label>
 						<input
 							type="text"
 							id="confirmNewPassword"
 							ref={confirmNewPasswordRef}
 						/>
 					</div>
-					<Button onClick={handlePasswordChange}>
-						Update Password
-					</Button>
+					<Button onClick={handlePasswordChange}>Update Password</Button>
 				</form>
 			</section>
 		</main>

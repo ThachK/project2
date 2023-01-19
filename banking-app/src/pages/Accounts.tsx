@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Account from "../features/accounts/Account/Account";
 import {
+	calculateAccountBalance,
 	fetchAccountsById,
 	getAccounts,
 } from "../features/accounts/accounts.slice";
@@ -32,6 +33,14 @@ const Accounts: React.FC<any> = () => {
 	useEffect(() => {
 		getAllAccounts();
 	}, [isModalOpen]); // eslint-disable-line
+
+	// when accounts are loaded:
+	useEffect(() => {
+		// loop through each account
+		accounts?.forEach((account: any) => {
+			dispatch(calculateAccountBalance(account));
+		});
+	}, [accounts]); // eslint-disable-line
 
 	return (
 		<div className="flex-column">
