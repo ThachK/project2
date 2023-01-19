@@ -43,7 +43,7 @@
 	transform: translateX(100%);
 	-moz-animation: scroll-left 1s linear infinite;
 	-webkit-animation: scroll-left 2s linear infinite;
-	animation: scroll-left 20s linear infinite;
+	animation: scroll-left 50s linear infinite;
 }
 
 @-moz-keyframes scroll-left {
