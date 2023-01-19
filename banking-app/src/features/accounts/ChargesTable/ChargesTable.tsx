@@ -11,10 +11,10 @@ const ChargesTable: React.FC<any> = ({ filter = "", allCharges }) => {
 	useEffect(() => {
 		if (filter === "Debits") {
 			//get all debits
-			setCharges(allCharges.filter((charge: any) => charge?.amount >= 0));
+			setCharges(allCharges.filter((charge: any) => charge?.chargeAmount >= 0));
 		} else if (filter === "Credits") {
 			//get all credits
-			setCharges(allCharges.filter((charge: any) => charge?.amount < 0));
+			setCharges(allCharges.filter((charge: any) => charge?.chargeAmount < 0));
 		} else {
 			setCharges(allCharges);
 		}
@@ -31,18 +31,18 @@ const ChargesTable: React.FC<any> = ({ filter = "", allCharges }) => {
 			<tbody>
 				{charges?.map((charge: any) => {
 					return (
-						<tr key={charge?.id}>
+						<tr key={charge?.chargeId}>
 							<td>{charge?.date}</td>
 							<td className="italics">{charge?.chargeName}</td>
 							<td
 								style={
-									charge?.amount > 0
+									charge?.chargeAmount > 0
 										? { color: "#27ae60" }
 										: { color: "#e74c3c" }
 								}
 								className="bold"
 							>
-								${Math.abs(charge?.amount)?.toFixed(2)}
+								${Math.abs(charge?.chargeAmount)?.toFixed(2)}
 							</td>
 						</tr>
 					);

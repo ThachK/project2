@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button/Button";
 import Dropdown from "../../ui/Dropdown/Dropdown";
+import { getUser } from "../../users/users.slice";
 import { createNewAccount } from "../accounts.slice";
 
 const NewAccountModal: React.FC<any> = ({ setIsModalOpen }) => {
 	const dispatch = useDispatch<any>();
 	const navigate = useNavigate();
+	const user = useSelector(getUser);
 
 	// user inputs
 	const [accountType, setAccountType] = useState("Savings");
@@ -26,7 +28,7 @@ const NewAccountModal: React.FC<any> = ({ setIsModalOpen }) => {
 		} else {
 			// create body to send to api endpoint
 			const body = {
-				userId: 0, // TODO: update to correct userId
+				userId: user?.userId,
 				name: accountName,
 				type: accountType,
 				balance: 0,
@@ -35,7 +37,7 @@ const NewAccountModal: React.FC<any> = ({ setIsModalOpen }) => {
 			// try to create new account
 			try {
 				await dispatch(createNewAccount(body));
-				navigate("/accounts", { replace: true });
+				// navigate("/accounts", { replace: true });
 			} catch (err: any) {
 				console.log(err.message);
 			}

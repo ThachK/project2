@@ -1,4 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+const BASE_URL = "http://localhost:5000";
 
 // define our initial state
 const initialState = {
@@ -129,36 +132,37 @@ dummyAccounts = dummyAccounts.map((account: any) => {
 	};
 });
 
+const getFormattedDate = () => {
+	const currentDate = new Date();
+	const month = currentDate.getMonth() + 1;
+	const day = currentDate.getDate();
+	const year = currentDate.getFullYear();
+	return month + "/" + day + "/" + year;
+};
+
 //create async thunks
 export const transferMoney = createAsyncThunk(
 	"accounts/transfer",
 	async (body: any) => {
 		try {
-			// const response = await axios.post("http://localhost:5000/accounts/transfer", body);
-			// return response.data;
-
-			// simulate using dummy data
-			dummyCharges = [
-				...dummyCharges,
-				{
-					id: dummyCharges.length,
-					account_id: body?.from,
-					date: "01/12/2023",
-					chargeName: `Transfer to account #${body?.to}`,
-					amount: -body?.amount,
-				},
-			];
-			dummyCharges = [
-				...dummyCharges,
-				{
-					id: dummyCharges.length,
-					account_id: body?.to,
-					date: "01/12/2023",
-					chargeName: `Transfer from account #${body?.from}`,
-					amount: body?.amount,
-				},
-			];
-
+			const fromPayload = {
+				chargeAmount: -body?.amount,
+				chargeName: `Transfer to account #${body?.to}`,
+				date: getFormattedDate(),
+			};
+			const toPayload = {
+				chargeAmount: body?.amount,
+				chargeName: `Transfer from account #${body?.from}`,
+				date: getFormattedDate(),
+			};
+			const fromRequest = await axios.post(
+				`${BASE_URL}/charges/create/${body?.from}`,
+				fromPayload
+			);
+			const toRequest = await axios.post(
+				`${BASE_URL}/charges/create/${body?.to}`,
+				toPayload
+			);
 			return true;
 		} catch (err: any) {
 			return err.message;
@@ -211,91 +215,51 @@ export const createNewAccount = createAsyncThunk(
 	"accounts/createAccount",
 	async (body: any) => {
 		try {
-			// const response = await axios.post("http://localhost:5000/accounts", body);
-			// return response.data;
-
-			// adding new account to dummy data
-			const { userId, name, type } = body;
-			const newAccount = {
-				id: dummyAccounts.length,
-				userId,
-				type,
-				name,
-				balance: 0,
-			};
-			dummyAccounts = [...dummyAccounts, newAccount];
-
-			dummyAccounts = dummyAccounts.map((account: any) => {
-				let balance = 0;
-
-				let charges = [];
-				for (let charge of dummyCharges) {
-					if (charge.account_id === account.id) {
-						charges.push(charge);
-					}
+			const response = await axios.post(
+				`${BASE_URL}/accounts/create/${body?.userId}`,
+				{
+					accountType: body?.type,
+					accountName: body?.name,
+					balance: body?.balance,
 				}
-
-				for (let charge of charges) {
-					balance += charge.amount;
-				}
-
-				return {
-					...account,
-					balance,
-				};
-			});
-
-			return true;
+			);
+			return response.data;
 		} catch (err: any) {
 			return err.message;
 		}
 	}
 );
-
 export const fetchAccountById = createAsyncThunk(
 	"accounts/fetchAccountById",
 	async (id: any) => {
 		try {
-			// const response = await axios.get(`http://localhost:5000/accounts/${id}`);
-			// return response.data;
-			for (let account of dummyAccounts) {
-				if (account.id === Number(id)) {
-					return account;
-				}
-			}
-			console.error(`No account found with id ${id}`);
-			return {};
+			const response = await axios.get(`${BASE_URL}/accounts/account/${id}`);
+			return response.data;
 		} catch (err: any) {
 			return err.message;
 		}
 	}
 );
-
 export const fetchAccountsById = createAsyncThunk(
 	//allows us to get async functions
 	"accounts/fetchAccountsById",
 	async (id: any) => {
-		try {
-			// const response = await axios.get(`http://localhost:5000/accounts/${id}`);
-			// return response.data;
-			return dummyAccounts;
-		} catch (err: any) {
-			return err.message;
+		if (id) {
+			try {
+				const response = await axios.get(`${BASE_URL}/accounts/user/${id}`);
+				return response.data;
+			} catch (err: any) {
+				return err.message;
+			}
 		}
 	}
 );
-
 export const fetchChargesById = createAsyncThunk(
 	"accounts/fetchCharges",
 	async (id: any) => {
 		try {
-			let results = [];
-			for (let charge of dummyCharges) {
-				if (charge.account_id === Number(id)) {
-					results.push(charge);
-				}
-			}
-			return results;
+			const response = await axios.get(`${BASE_URL}/charges/account/${id}`);
+			return response.data;
 		} catch (err: any) {
 			return err.message;
 		}

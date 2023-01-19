@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../features/Register/Register.css";
 import Button from "../features/ui/Button/Button";
+import { register } from "../features/users/users.slice";
 
 const Register: React.FC<any> = () => {
+	const dispatch = useDispatch<any>();
 	const navigate = useNavigate();
 
 	const [firstName, setFirstName] = useState("");
@@ -64,9 +67,10 @@ const Register: React.FC<any> = () => {
 					phoneNumber,
 					address,
 				};
-				console.log(body);
 
 				// TODO: implement register logic
+				dispatch(register(body));
+
 				alert("You have created a new account.");
 
 				// reset field
@@ -127,16 +131,12 @@ const Register: React.FC<any> = () => {
 						/>
 					</div>
 					<div className="flex-row">
-						<label htmlFor="confirmPassword">
-							Confirm Password:
-						</label>
+						<label htmlFor="confirmPassword">Confirm Password:</label>
 						<input
 							type="password"
 							id="confirmPassword"
 							value={confirmPassword}
-							onChange={(e: any) =>
-								setConfirmPassword(e.target.value)
-							}
+							onChange={(e: any) => setConfirmPassword(e.target.value)}
 						/>
 					</div>
 					<div className="flex-row">
@@ -145,9 +145,7 @@ const Register: React.FC<any> = () => {
 							type="number"
 							id="phoneNumber"
 							value={phoneNumber}
-							onChange={(e: any) =>
-								setPhoneNumber(e.target.value)
-							}
+							onChange={(e: any) => setPhoneNumber(e.target.value)}
 						/>
 					</div>
 					<div className="flex-row">

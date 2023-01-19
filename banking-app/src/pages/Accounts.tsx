@@ -16,6 +16,10 @@ const Accounts: React.FC<any> = () => {
 	const user = useSelector(getUser);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
+	const getAllAccounts = async () => {
+		await dispatch(fetchAccountsById(user?.userId));
+	};
+
 	// on component mount, get user from local storage
 	useEffect(() => {
 		const setUserState = async () => {
@@ -26,25 +30,25 @@ const Accounts: React.FC<any> = () => {
 	}, []); // eslint-disable-line
 
 	useEffect(() => {
-		const getAccounts = async () => {
-			await dispatch(fetchAccountsById(user?.id));
-		};
-
-		getAccounts();
+		getAllAccounts();
 	}, [isModalOpen]); // eslint-disable-line
 
 	return (
 		<div className="flex-column">
-			<Button onClick={() => setIsModalOpen(true)}>
-				Add New Account
-			</Button>
+			{user?.userId ? (
+				<>
+					<Button onClick={() => setIsModalOpen(true)}>Add New Account</Button>
 
-			{/* mapping through dummy data to account component   */}
-			{accounts?.map((account: any) => {
-				return <Account key={account?.id} data={account} />;
-			})}
+					{/* mapping through dummy data to account component   */}
+					{accounts?.map((account: any) => {
+						return <Account key={account?.accountId} data={account} />;
+					})}
 
-			{isModalOpen && <NewAccountModal setIsModalOpen={setIsModalOpen} />}
+					{isModalOpen && <NewAccountModal setIsModalOpen={setIsModalOpen} />}
+				</>
+			) : (
+				<h1>Please login to view this page.</h1>
+			)}
 		</div>
 	);
 };

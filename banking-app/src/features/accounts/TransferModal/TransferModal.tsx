@@ -9,8 +9,10 @@ import {
 	getCurrentAccount,
 	transferMoney,
 } from "../accounts.slice";
+import { getUser } from "../../users/users.slice";
 
 const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
+	const user = useSelector(getUser);
 	const dispatch = useDispatch<any>();
 	const accounts = useSelector(getAccounts);
 	const currentAccount = useSelector(getCurrentAccount);
@@ -20,14 +22,14 @@ const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
 	const getOtherAccounts = () => {
 		const otherAccounts = [];
 		for (let account of accounts) {
-			account?.id !== currentAccount?.id &&
-				otherAccounts.push(account?.name);
+			account?.accountId !== currentAccount?.accountId &&
+				otherAccounts.push(account?.accountName);
 		}
 		return otherAccounts;
 	};
 
 	// form data
-	const [fromArr, setFromArr] = useState([currentAccount?.name]); //eslint-disable-line
+	const [fromArr, setFromArr] = useState([currentAccount?.accountName]); //eslint-disable-line
 	const [toArr, setToArr] = useState(getOtherAccounts());
 	const [toAccount, setToAccount] = useState<any>();
 
@@ -39,7 +41,7 @@ const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
 	// get accounts from api
 	useEffect(() => {
 		const getAccounts = async () => {
-			await dispatch(fetchAccountsById(0));
+			await dispatch(fetchAccountsById(user?.userId));
 		};
 
 		getAccounts();
@@ -62,12 +64,12 @@ const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
 				alert("Please provide an amount greater than $0");
 			} else {
 				const transferAmt = Number(Number(transferAmount).toFixed(2));
-				let fromAccountId = currentAccount?.id;
+				let fromAccountId = currentAccount?.accountId;
 				let toAccountId = 0;
 
 				for (let account of accounts) {
-					if (account?.name === toAccount) {
-						toAccountId = account?.id;
+					if (account?.accountName === toAccount) {
+						toAccountId = account?.accountId;
 					}
 				}
 
@@ -79,9 +81,7 @@ const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
 					};
 					await dispatch(transferMoney(body));
 
-					alert(
-						`Transferred $${transferAmt} from ${fromArr} to ${toAccount}.`
-					);
+					alert(`Transferred $${transferAmt} from ${fromArr} to ${toAccount}.`);
 					setIsModalOpen(false);
 				} catch (err: any) {
 					alert("Unable to transfer money: " + err.message);

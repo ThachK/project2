@@ -22,7 +22,7 @@ const Layout: React.FC<any> = () => {
 			<header className="mainHeader">
 				<h1>Revature Bank</h1>
 				<nav>
-					{user?.id >= 0 && (
+					{user?.userId >= 0 && (
 						<>
 							<Link to="accounts">Accounts</Link>
 							<Link to="settings">Settings</Link>
@@ -30,7 +30,7 @@ const Layout: React.FC<any> = () => {
 					)}
 				</nav>
 				<nav>
-					{user?.id >= 0 ? (
+					{user?.userId >= 0 ? (
 						<Link to="/" onClick={handleLogout}>
 							Logout
 						</Link>

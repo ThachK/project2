@@ -23,9 +23,9 @@ const AccountHeader: React.FC<any> = (props: any) => {
 		<section className="accountHeader">
 			{redirect && <Navigate to="/accounts" replace={true} />}
 			<div>
-				<h2>{props?.account?.name}</h2>
+				<h2>{props?.account?.accountName}</h2>
 				<p className="light-gray italics capitalize">
-					{props?.account?.type}
+					{props?.account?.accountType}
 				</p>
 				{/* <Link onClick={handleDelete} to="">
 					Delete Account

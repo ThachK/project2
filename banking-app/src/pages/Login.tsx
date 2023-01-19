@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../features/ui/Button/Button";
 import "../features/login/Login.css";
-import { login } from "../features/users/users.slice";
-import { useDispatch } from "react-redux";
+import { getStatus, login, setStatus } from "../features/users/users.slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Login: React.FC<any> = () => {
 	const dispatch = useDispatch<any>();
 	const navigate = useNavigate();
+
+	const status = useSelector(getStatus);
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -25,20 +27,30 @@ const Login: React.FC<any> = () => {
 			};
 			try {
 				await dispatch(login(body));
-
-				alert("You have logged in.");
-
-				// reset form
-				setEmail("");
-				setPassword("");
-
-				// navigate
-				navigate("/accounts");
 			} catch (err: any) {
 				alert(`Unabled to login: ${err.message}`);
 			}
 		}
 	};
+
+	// listen for status change in users slice
+	useEffect(() => {
+		if (status === "success") {
+			// reset form
+			setEmail("");
+			setPassword("");
+
+			// navigate
+			navigate("/accounts");
+
+			// reset the status
+			dispatch(setStatus("idle"));
+
+			alert("Successfully logged in.");
+		} else {
+			status === "rejected" && alert("Unabled to login: invalid credentials.");
+		}
+	}, [status]); // eslint-disable-line
 
 	return (
 		<div className="login">

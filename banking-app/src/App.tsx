@@ -1,5 +1,9 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { fetchAccountsById } from "./features/accounts/accounts.slice";
 import Layout from "./features/routing/Layout";
+import { getUser, setUser } from "./features/users/users.slice";
 import Account from "./pages/Account";
 import Accounts from "./pages/Accounts";
 import Home from "./pages/Home";
@@ -8,6 +12,19 @@ import Register from "./pages/Register";
 import Settings from "./pages/Settings";
 
 function App() {
+	const dispatch = useDispatch<any>();
+	const user = useSelector(getUser);
+
+	useEffect(() => {
+		dispatch(setUser());
+	}, []);
+
+	useEffect(() => {
+		if (user?.userId) {
+			dispatch(fetchAccountsById(user.userId));
+		}
+	}, [user]);
+
 	return (
 		<Routes>
 			<Route path="" element={<Layout />}>
