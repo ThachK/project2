@@ -98,6 +98,7 @@ body {
 
 .modal {
 	background-color: white;
+	color: black !important;
 	width: 500px;
 	position: absolute;
 	top: 50%;

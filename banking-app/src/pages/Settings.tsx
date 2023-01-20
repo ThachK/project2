@@ -155,7 +155,7 @@ const Settings: React.FC<any> = () => {
 		<main className="flex-column">
 			<div>
 				<h2>Settings</h2>
-				<p className="gray">Manage your account settings and preferences.</p>
+				<p>Manage your account settings and preferences.</p>
 			</div>
 			<section className="settingsSection flex-column">
 				<h3>Application Settings</h3>
