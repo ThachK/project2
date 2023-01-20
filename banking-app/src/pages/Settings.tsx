@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "../features/settings/Settings.css";
 import { addToast } from "../features/toasts/toasts.slice";
 import Button from "../features/ui/Button/Button";
+import Toggle from "../features/ui/Toggle/Toggle";
 import {
 	changeAddress,
 	changePassword,
@@ -18,6 +19,11 @@ const Settings: React.FC<any> = () => {
 	const [email, setEmail] = useState(user?.email || "");
 	const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || "");
 	const [currentPwd, setCurrentPwd] = useState(user?.password || "");
+
+	// application settings
+	const [darkMode, setDarkMode] = useState(
+		localStorage.getItem("darkMode") || false
+	);
 
 	// on user load, set contact info
 	useEffect(() => {
@@ -127,12 +133,39 @@ const Settings: React.FC<any> = () => {
 		}
 	};
 
+	const turnDarkModeOn = () => {
+		localStorage.setItem("darkMode", "true");
+		setDarkMode(true);
+		document.body.classList.add("darkMode");
+	};
+
+	const turnDarkModeOff = () => {
+		localStorage.setItem("darkMode", "false");
+		setDarkMode(false);
+		document.body.classList.remove("darkMode");
+	};
+
+	useEffect(() => {
+		darkMode
+			? document.body.classList.add("darkMode")
+			: document.body.classList.remove("darkMode");
+	}, [darkMode]);
+
 	return (
 		<main className="flex-column">
 			<div>
 				<h2>Settings</h2>
 				<p className="gray">Manage your account settings and preferences.</p>
 			</div>
+			<section className="settingsSection flex-column">
+				<h3>Application Settings</h3>
+				<Toggle
+					toggle={darkMode}
+					label="Dark Mode"
+					on={turnDarkModeOn}
+					off={turnDarkModeOff}
+				/>
+			</section>
 			<section className="settingsSection flex-column">
 				<h3>Address</h3>
 				<form className="flex-column">

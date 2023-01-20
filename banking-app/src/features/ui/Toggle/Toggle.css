@@ -1,0 +1,26 @@
+.toggleWrapper {
+	display: flex;
+	width: min-content;
+	align-items: center;
+	column-gap: 0.5rem;
+}
+
+.toggleWrapper p {
+	white-space: nowrap;
+}
+
+.toggleBtn {
+	width: 50px;
+	border-radius: 100px;
+	border: 1px solid var(--secondary-light-gray);
+	padding: 3px;
+	cursor: pointer;
+}
+
+.toggleSlider {
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	transition: all 0.25s;
+	float: left;
+}
