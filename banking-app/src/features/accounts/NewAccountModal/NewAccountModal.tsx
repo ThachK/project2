@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
+import { addToast } from "../../toasts/toasts.slice";
 import Button from "../../ui/Button/Button";
 import Dropdown from "../../ui/Dropdown/Dropdown";
 import { getUser } from "../../users/users.slice";
@@ -22,7 +23,12 @@ const NewAccountModal: React.FC<any> = ({ setIsModalOpen }) => {
 
 	const createAccount = async () => {
 		if (!accountName || !accountType) {
-			alert("Please enter an account name and type");
+			dispatch(
+				addToast({
+					status: "warning",
+					message: "Please enter an account name and type.",
+				})
+			);
 		} else {
 			// create body to send to api endpoint
 			const body = {
@@ -35,8 +41,20 @@ const NewAccountModal: React.FC<any> = ({ setIsModalOpen }) => {
 			// try to create new account
 			try {
 				await dispatch(createNewAccount(body));
+				dispatch(
+					addToast({
+						status: "success",
+						message: "Account has been created.",
+					})
+				);
 			} catch (err: any) {
 				console.log(err.message);
+				dispatch(
+					addToast({
+						status: "error",
+						message: "Unable to create account.",
+					})
+				);
 			}
 
 			// close the modal

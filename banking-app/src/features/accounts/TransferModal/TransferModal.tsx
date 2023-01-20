@@ -10,6 +10,7 @@ import {
 	transferMoney,
 } from "../accounts.slice";
 import { getUser } from "../../users/users.slice";
+import { addToast } from "../../toasts/toasts.slice";
 
 const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
 	const user = useSelector(getUser);
@@ -58,10 +59,20 @@ const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
 
 	const handleTransfer = async () => {
 		if (!transferAmount) {
-			alert("Please provide a transfer amount.");
+			dispatch(
+				addToast({
+					status: "warning",
+					message: "Please provide a transfer amount.",
+				})
+			);
 		} else {
 			if (transferAmount <= 0) {
-				alert("Please provide an amount greater than $0");
+				dispatch(
+					addToast({
+						status: "warning",
+						message: "Please provide an amount greater than $0",
+					})
+				);
 			} else {
 				const transferAmt = Number(Number(transferAmount).toFixed(2));
 				let fromAccountId = currentAccount?.accountId;
@@ -81,10 +92,20 @@ const TransferModal: React.FC<any> = ({ setIsModalOpen }) => {
 					};
 					await dispatch(transferMoney(body));
 
-					alert(`Transferred $${transferAmt} from ${fromArr} to ${toAccount}.`);
+					dispatch(
+						addToast({
+							status: "success",
+							message: `Transferred $${transferAmt} from ${fromArr} to ${toAccount}.`,
+						})
+					);
 					setIsModalOpen(false);
 				} catch (err: any) {
-					alert("Unable to transfer money: " + err.message);
+					dispatch(
+						addToast({
+							status: "error",
+							message: "Unable to transfer money: " + err.message,
+						})
+					);
 				}
 			}
 		}

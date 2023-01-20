@@ -4,6 +4,7 @@ import Button from "../features/ui/Button/Button";
 import "../features/login/Login.css";
 import { getStatus, login, setStatus } from "../features/users/users.slice";
 import { useDispatch, useSelector } from "react-redux";
+import { addToast } from "../features/toasts/toasts.slice";
 
 const Login: React.FC<any> = () => {
 	const dispatch = useDispatch<any>();
@@ -19,7 +20,12 @@ const Login: React.FC<any> = () => {
 
 		// validating fields
 		if (!email || !password) {
-			alert("Please enter an email and password");
+			dispatch(
+				addToast({
+					status: "warning",
+					message: "Please enter email and password.",
+				})
+			);
 		} else {
 			const body = {
 				email,
@@ -28,7 +34,12 @@ const Login: React.FC<any> = () => {
 			try {
 				await dispatch(login(body));
 			} catch (err: any) {
-				alert(`Unable to login: ${err.message}`);
+				dispatch(
+					addToast({
+						status: "error",
+						message: "Unable to login at this time.",
+					})
+				);
 			}
 		}
 	};
@@ -46,9 +57,19 @@ const Login: React.FC<any> = () => {
 			// reset the status
 			dispatch(setStatus("idle"));
 
-			alert("Successfully logged in.");
+			dispatch(
+				addToast({
+					status: "success",
+					message: "You have been logged in.",
+				})
+			);
 		} else if (status === "rejected") {
-			alert("Unabled to login: invalid credentials.");
+			dispatch(
+				addToast({
+					status: "error",
+					message: "Unable to login: invalid credentials.",
+				})
+			);
 			dispatch(setStatus("idle"));
 		}
 	}, [status]); // eslint-disable-line

@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
+import Toasts from "../toasts/Toasts";
+import { addToast } from "../toasts/toasts.slice";
 import { getUser, logout } from "../users/users.slice";
 import "./Layout.css";
 
@@ -13,6 +15,12 @@ const Layout: React.FC<any> = () => {
 
 	const handleLogout = () => {
 		dispatch(logout());
+		dispatch(
+			addToast({
+				status: "success",
+				message: "You have been logged out.",
+			})
+		);
 	};
 
 	useEffect(() => {}, [user]);
@@ -46,6 +54,7 @@ const Layout: React.FC<any> = () => {
 				{/* This links to the appropriate page component  */}
 				<Outlet />
 			</div>
+			<Toasts />
 		</>
 	);
 };

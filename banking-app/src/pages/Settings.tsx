@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../features/settings/Settings.css";
+import { addToast } from "../features/toasts/toasts.slice";
 import Button from "../features/ui/Button/Button";
 import {
 	changeAddress,
@@ -42,13 +43,23 @@ const Settings: React.FC<any> = () => {
 
 		// make sure fields aren't empty
 		if (!currentPassword || !newPassword || !confirmNewPassword) {
-			alert("Please provide values for all fields.");
+			dispatch(
+				addToast({
+					status: "warning",
+					message: "Please provide values for all fields.",
+				})
+			);
 		} else {
 			// make sure new password and confirmation are the same
 			if (newPassword === confirmNewPassword) {
 				// make sure new password doesn't match current password
 				if (newPassword === currentPassword) {
-					alert("New password cannot be your current password.");
+					dispatch(
+						addToast({
+							status: "warning",
+							message: "New password cannot be your current password.",
+						})
+					);
 				} else {
 					// check if given password == current password
 					if (currentPassword === currentPwd) {
@@ -63,15 +74,29 @@ const Settings: React.FC<any> = () => {
 						newPasswordRef.current.value = "";
 						confirmNewPasswordRef.current.value = "";
 
-						alert("Password has been updated.");
+						dispatch(
+							addToast({
+								status: "success",
+								message: "Password has been updated.",
+							})
+						);
 					} else {
-						alert(
-							"Cannot update password: your current password is incorrect."
+						dispatch(
+							addToast({
+								status: "error",
+								message:
+									"Cannot update password: your current password is incorrect.",
+							})
 						);
 					}
 				}
 			} else {
-				alert("Passwords do not match");
+				dispatch(
+					addToast({
+						status: "warning",
+						message: "Passwords do not match.",
+					})
+				);
 			}
 		}
 	};
@@ -80,7 +105,12 @@ const Settings: React.FC<any> = () => {
 		e.preventDefault();
 
 		if (!address) {
-			alert("Please provide an address.");
+			dispatch(
+				addToast({
+					status: "warning",
+					message: "Please provide an address.",
+				})
+			);
 		} else {
 			const payload = {
 				id: user?.userId,
@@ -88,7 +118,12 @@ const Settings: React.FC<any> = () => {
 			};
 			dispatch(changeAddress(payload));
 
-			alert("Address has been updated.");
+			dispatch(
+				addToast({
+					status: "success",
+					message: "Address has been updated.",
+				})
+			);
 		}
 	};
 

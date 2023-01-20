@@ -41,17 +41,6 @@ export const transferMoney = createAsyncThunk(
 		}
 	}
 );
-export const deleteAccount = createAsyncThunk(
-	"accounts/deleteAccount",
-	async (id: any) => {
-		try {
-			await axios.delete(`${BASE_URL}/accounts/delete/${id}`);
-			return true;
-		} catch (err: any) {
-			return err.message;
-		}
-	}
-);
 export const createNewAccount = createAsyncThunk(
 	"accounts/createAccount",
 	async (body: any) => {

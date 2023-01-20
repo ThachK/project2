@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../features/Register/Register.css";
+import { addToast } from "../features/toasts/toasts.slice";
 import Button from "../features/ui/Button/Button";
 import { register } from "../features/users/users.slice";
 
@@ -51,13 +52,21 @@ const Register: React.FC<any> = () => {
 		// form validation
 		const missingFields = getMissingFields();
 		if (missingFields.length > 0) {
-			alert(
-				`Please enter valid information for the following fields: ${missingFields}`
+			dispatch(
+				addToast({
+					status: "warning",
+					message: `Please enter values for ${missingFields}.`,
+				})
 			);
 		} else {
 			// check if passwords match
 			if (password !== confirmPassword) {
-				alert("Error: passwords do not match.");
+				dispatch(
+					addToast({
+						status: "warning",
+						message: `Passwords do not match.`,
+					})
+				);
 			} else {
 				const body = {
 					firstName,
@@ -71,7 +80,12 @@ const Register: React.FC<any> = () => {
 				// TODO: implement register logic
 				dispatch(register(body));
 
-				alert("You have created a new account.");
+				dispatch(
+					addToast({
+						status: "success",
+						message: `Account successfully created.`,
+					})
+				);
 
 				// reset field
 				setFirstName("");
